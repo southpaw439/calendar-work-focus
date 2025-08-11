@@ -1,0 +1,7 @@
+{
+  "name": "com.readyai.focusbridge",
+  "description": "Toggle macOS Focus from Chrome",
+  "path": "/usr/local/bin/focusbridge",
+  "type": "stdio",
+  "allowed_origins": ["chrome-extension://<EXTENSION_ID>/"]
+}
