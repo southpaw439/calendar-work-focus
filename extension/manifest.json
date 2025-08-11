@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Calendar → Work Focus",
+  "version": "1.0.0",
+  "description": "Enables macOS Work Focus during busy events or active call tabs, only when you're active on your Mac.",
+  "permissions": ["identity", "storage", "alarms", "idle", "tabs", "nativeMessaging", "notifications"],
+  "host_permissions": ["https://www.googleapis.com/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "Calendar → Work Focus" },
+  "icons": { "128": "assets/icon128.png" }
+}
