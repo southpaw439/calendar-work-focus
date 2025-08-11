@@ -1,0 +1,39 @@
+name: build-helper
+on:
+  workflow_dispatch:
+    inputs:
+      EXTENSION_ID:
+        description: "Chrome Web Store Extension ID"
+        required: true
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Swift CLI
+        run: |
+          cd native
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Prepare payload
+        run: |
+          mkdir -p build/payload
+          cp native/out/focusbridge build/payload/focusbridge
+          # bake the store extension ID into the host manifest
+          sed "s/<EXTENSION_ID>/${{ github.event.inputs.EXTENSION_ID }}/g" native/host-manifest.json > build/payload/com.readyai.focusbridge.json
+
+      - name: Zip helper payload
+        run: |
+          cd build && zip -r helper_payload.zip payload
+
+      - name: Create GitHub Release (draft)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: helper-${{ github.run_number }}
+          name: "Helper build ${{ github.run_number }}"
+          draft: true
+          files: build/helper_payload.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
